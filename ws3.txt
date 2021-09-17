@@ -1,0 +1,121 @@
+T.K. Bui | CS 185C | Worksheet 3, due 9/16/2021
+======================================================================================================================
+Script started on 2021-09-17 05:36:29+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="189" LINES="52"]
+**NOTE: Script start time is ahead due to server timezone.
+
+----------------------------------------------------------------------------------------------------------------------
+EXTRACTING COLUMNS INTO THEIR OWN TEXT FILES
+
+bui@f6linuxA7:~$ head -n 1 amazon_reviews_us_Books_v1_02.tsv
+marketplace	customer_id	review_id	product_id	product_parent	product_title	product_category	star_rating	helpful_votes	total_votes	vine	verified_purchase	review_headline	review_body	review_date
+
+bui@f6linuxA7:~$ cut -f 2 amazon_reviews_us_Books_v1_02.tsv > customerids.txt
+
+bui@f6linuxA7:~$ cut -f 4 amazon_reviews_us_Books_v1_02.tsv > productids.txt
+
+bui@f6linuxA7:~$ cut -f 9 amazon_reviews_us_Books_v1_02.tsv > helpfulness.txt
+
+bui@f6linuxA7:~$ wc customerids.txt
+ 3105521  3105521 27949692 customerids.txt
+
+bui@f6linuxA7:~$ wc productids.txt
+ 3105521  3105521 34160731 productids.txt
+
+bui@f6linuxA7:~$ wc helpfulness.txt
+3105521 3105521 7024594 helpfulness.txt
+
+EXPLANATION: With the above commands and results, I'm getting the specific columns for customer ids,
+product ids, and helpful votes into their own respective files to be used later. I use wc to ensure
+that I get the same amount of words per file, meaning I successfully extracted single columns.
+
+----------------------------------------------------------------------------------------------------------------------
+1) Sort the customer IDs in order to find the customer who authored the most reviews.
+   Which customers are the top 3 reviewers (with the most reviews)?
+
+COMMANDS AND RESULTS:
+bui@f6linuxA7:~$ sort customerids.txt > customerids.txt.sorted
+
+bui@f6linuxA7:~$ uniq -c customerids.txt.sorted > customerids.txt.sorted.uniqcounts
+
+bui@f6linuxA7:~$ sort -nk1 --reverse customerids.txt.sorted.uniqcounts > customerids.txt.sorted.uniqcounts.reversed
+
+bui@f6linuxA7:~$ head customerids.txt.sorted.uniqcounts.reversed
+  21922 50122160
+   9964 50732546
+   2664 52615377
+   2215 45041039
+   1797 50776149
+   1786 50913245
+   1643 20595117
+   1622 45273033
+   1416 39569598
+   1384 49693975
+
+EXPLANATION: I sorted the customer ids so that I count use uniq -c. They have to be sorted first because uniq -c
+only counts ADJACENT lines, so if ids are counted when unsorted, there can be multiple counts on the same id.
+I then sorted based on the count of ids in reverse so that the highest count is first.
+So, the top 3 reviewers are those with the ids 50122160, 50732546, and 52615377.
+
+----------------------------------------------------------------------------------------------------------------------
+2) Sort the products in order to find the product that has the most reviews.
+   What are the top 3 most reviewed products?
+
+COMMANDS AND RESULTS:
+bui@f6linuxA7:~$ sort productids.txt > productids.txt.sorted
+
+bui@f6linuxA7:~$ uniq -c productids.txt.sorted > productids.txt.sorted.uniqcounts
+
+bui@f6linuxA7:~$ sort -nk1 --reverse productids.txt.sorted.uniqcounts > productids.txt.sorted.uniqcounts.reversed
+
+bui@f6linuxA7:~$ head productids.txt.sorted.uniqcounts.reversed
+   4625 043935806X
+   3739 0439139597
+   2666 0525947647
+   2615 0895260174
+   2584 0385504209
+   2366 0590353403
+   2052 0439784549
+   2024 0316666343
+   1795 1400050308
+   1772 0312864590
+
+EXPLANATION: Like with customer ids, I sorted first to get an accurate count with uniq -c.
+Then I sorted in reverse on the count column to get the products with the most reviews.
+The top 3 most reviewed products are products with ids 043935806X, 0439139597, and 0525947647.
+
+----------------------------------------------------------------------------------------------------------------------
+3) Sort the helpfulness values in the file. How many times does each helpfulness value appear overall?
+
+COMMANDS AND RESULTS:
+bui@f6linuxA7:~$ sort helpfulness.txt > helpfulness.txt.sorted
+
+bui@f6linuxA7:~$ uniq -c helpfulness.txt.sorted > helpfulness.txt.sorted.uniqcounts
+
+bui@f6linuxA7:~$ sort -nk1 --reverse helpfulness.txt.sorted.uniqcounts > helpfulness.txt.sorted.uniqcounts.reversed
+
+bui@f6linuxA7:~$ head helpfulness.txt.sorted.uniqcounts.reversed
+ 459924 0
+ 408857 1
+ 333718 2
+ 269068 3
+ 215443 4
+ 176301 5
+ 144403 6
+ 120319 7
+ 101095 8
+  85924 9
+
+EXPLANATION: Like above, I first sorted the helpfulness votes and then used uniq -c to get their count of
+appearance. Then I sorted in reverse based on count and found the number of times the helpfulness values
+from 0 to 9 appear in the reviews.
+
+----------------------------------------------------------------------------------------------------------------------
+bui@f6linuxA7:~$ history > cmds.log
+bui@f6linuxA7:~$ ls
+amazon_reviews_us_Books_v1_02.tsv  customerids.txt.sorted                      helpfulness.txt.sorted                      productids.txt.sorted                      ws3.txt
+assignments                        customerids.txt.sorted.uniqcounts           helpfulness.txt.sorted.uniqcounts           productids.txt.sorted.uniqcounts
+cmds.log                           customerids.txt.sorted.uniqcounts.reversed  helpfulness.txt.sorted.uniqcounts.reversed  productids.txt.sorted.uniqcounts.reversed
+customerids.txt                    helpfulness.txt                             productids.txt                              worksheets
+bui@f6linuxA7:~$ exit
+
+Script done on 2021-09-17 05:41:26+00:00 [COMMAND_EXIT_CODE="0"]
